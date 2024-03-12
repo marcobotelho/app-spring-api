@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.projeto.appspringapi.record.AlterarSenhaRecord;
 import com.projeto.appspringapi.record.MsgRecord;
-import com.projeto.appspringapi.record.RedefinirSenhaRecord;
 import com.projeto.appspringapi.record.UsuarioRecord;
 import com.projeto.appspringapi.service.UsuarioService;
 
@@ -93,12 +93,12 @@ public class UsuarioController {
 	}
 
 	@PutMapping("/alterar-senha")
-	public ResponseEntity<MsgRecord> alterarSenha(@RequestBody @Valid RedefinirSenhaRecord redefinirSenhaRecord,
+	public ResponseEntity<MsgRecord> alterarSenha(@RequestBody @Valid AlterarSenhaRecord alterarSenhaRecord,
 			HttpServletRequest request) {
-		usuarioService.alterarSenha(redefinirSenhaRecord);
+		usuarioService.alterarSenha(alterarSenhaRecord);
 		String date = LocalDateTime.now().format(formatter);
 		HttpStatus status = HttpStatus.OK;
-		String message = "Senha redefinida com sucesso!";
+		String message = "Senha alterada com sucesso!";
 		String path = request.getRequestURL().toString();
 
 		MsgRecord msg = new MsgRecord(date, status.toString(), message, path);

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.projeto.appspringapi.mapper.UsuarioMapper;
 import com.projeto.appspringapi.model.UsuarioModel;
+import com.projeto.appspringapi.record.AlterarSenhaRecord;
 import com.projeto.appspringapi.record.LoginRecord;
-import com.projeto.appspringapi.record.RedefinirSenhaRecord;
 import com.projeto.appspringapi.record.UsuarioRecord;
 import com.projeto.appspringapi.repository.UsuarioRepository;
 
@@ -132,23 +132,23 @@ public class UsuarioService {
 		emailService.enviarEmail(usuario.getEmail(), "Recuperação de Senha", corpoEmail, true);
 	}
 
-	public void alterarSenha(RedefinirSenhaRecord redefinirSenhaRecord) {
-		String usuarioEmail = jwtService.extrairUsuarioEmail(redefinirSenhaRecord.token());
+	public void alterarSenha(AlterarSenhaRecord alterarSenhaRecord) {
+		String usuarioEmail = jwtService.extrairUsuarioEmail(alterarSenhaRecord.token());
 		UsuarioModel usuario = usuarioRepository.findByEmail(usuarioEmail).get();
-		if (!redefinirSenhaRecord.senhaNova().equals(redefinirSenhaRecord.senhaNovaConfirmacao())) {
+		if (!alterarSenhaRecord.senhaNova().equals(alterarSenhaRecord.senhaNovaConfirmacao())) {
 			throw new RuntimeException("As senhas novas informadas sao diferentes!");
 		}
-		if (!redefinirSenhaRecord.token().equals(usuario.getToken())) {
+		if (!alterarSenhaRecord.token().equals(usuario.getToken())) {
 			throw new RuntimeException("Recuperação de senha desatualizada! Gere nova recuperação de senha.");
 		}
 		// if (!passwordEncoder.matches(formSenha.senhaAtual(), usuario.getSenha())) {
 		// throw new RuntimeException("Senha atual incorreta!");
 		// }
-		if (!redefinirSenhaRecord.senhaAtual().equals(usuario.getSenha())) {
+		if (!alterarSenhaRecord.senhaAtual().equals(usuario.getSenha())) {
 			throw new RuntimeException("Senha atual incorreta!");
 		}
 		// usuario.setSenha(passwordEncoder.encode(formSenha.senhaNova()));
-		usuario.setSenha(redefinirSenhaRecord.senhaNova());
+		usuario.setSenha(alterarSenhaRecord.senhaNova());
 
 		usuario.setToken(null);
 		usuarioRepository.save(usuario);
