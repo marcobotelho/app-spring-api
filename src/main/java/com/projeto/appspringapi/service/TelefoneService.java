@@ -57,7 +57,7 @@ public class TelefoneService {
 		return TelefoneMapper.toRecordList(telefoneRepository.findAll());
 	}
 
-	public List<TelefoneRecord> getAllByClienteId(Long usuarioId) {
-		return TelefoneMapper.toRecordList(telefoneRepository.findByClienteId(usuarioId));
+	public List<TelefoneRecord> getAllByClienteId(Long clienteId) {
+		return TelefoneMapper.toRecordList(telefoneRepository.findByClienteId(clienteId));
 	}
 }
