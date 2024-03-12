@@ -11,6 +11,7 @@ import com.projeto.appspringapi.record.AlterarSenhaRecord;
 import com.projeto.appspringapi.record.LoginRecord;
 import com.projeto.appspringapi.record.UsuarioRecord;
 import com.projeto.appspringapi.repository.UsuarioRepository;
+import com.projeto.appspringapi.security.JwtTokenUtil;
 
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,7 +32,7 @@ public class UsuarioService {
 	// private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	private JwtService jwtService;
+	private JwtTokenUtil jwtService;
 
 	@Autowired
 	private PasswordGeneratorService passwordGeneratorService;

@@ -32,7 +32,7 @@ public class LoginController {
 
         String date = LocalDateTime.now().format(formatter);
         HttpStatus status = HttpStatus.OK;
-        String message = "JWT Bearer " + token;
+        String message = "Bearer Token " + token;
         String path = request.getRequestURL().toString();
 
         MsgRecord msg = new MsgRecord(date, status.toString(), message, path);

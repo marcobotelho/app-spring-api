@@ -10,7 +10,7 @@ import com.projeto.appspringapi.mapper.ClienteMapper;
 import com.projeto.appspringapi.mapper.TelefoneMapper;
 import com.projeto.appspringapi.model.ClienteModel;
 import com.projeto.appspringapi.repository.ClienteRepository;
-import com.projeto.appspringapi.service.JwtService;
+import com.projeto.appspringapi.security.JwtTokenUtil;
 
 import jakarta.transaction.Transactional;
 
@@ -18,7 +18,7 @@ import jakarta.transaction.Transactional;
 class AppSpringApiApplicationTests {
 
 	@Autowired
-	private JwtService jwtService;
+	private JwtTokenUtil jwtService;
 
 	@Autowired
 	private ClienteRepository clienteRepository;
