@@ -20,12 +20,15 @@ public class TelefoneService {
 	@Autowired
 	private TelefoneRepository telefoneRepository;
 
-	private TelefoneModel getTelefoneModelById(Long id) {
+	public TelefoneModel getTelefoneModelById(Long id) {
 		return telefoneRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Telefone com id " + id + " não encontrado!"));
 	}
 
 	public TelefoneRecord save(TelefoneRecord record) {
+		if (record.id() != null && record.id() > 0) {
+			throw new IllegalArgumentException("Id deve ser nulo para incluir um novo telefone!");
+		}
 		TelefoneModel telefoneModel = telefoneRepository.save(TelefoneMapper.toModel(record));
 		return TelefoneMapper.toRecord(telefoneModel);
 	}
