@@ -92,6 +92,13 @@ public class ClienteModel {
 		this.estado = estado;
 	}
 
+	public ClienteModel(Long id, String nome, String email, Integer idade) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.idade = idade;
+	}
+
 	public Long getId() {
 		return id;
 	}
