@@ -77,7 +77,7 @@ public class UsuarioController {
 
 	@GetMapping("/reset-senha/{email}")
 	public ResponseEntity<MsgRecord> resetSenha(@PathVariable("email") String email, HttpServletRequest request)
-			throws MessagingException {
+			throws Exception {
 		String baseURL = request.getRequestURL().substring(0,
 				request.getRequestURL().indexOf(request.getServletPath()));
 
