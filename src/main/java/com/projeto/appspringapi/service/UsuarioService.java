@@ -3,6 +3,7 @@ package com.projeto.appspringapi.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.projeto.appspringapi.mapper.UsuarioMapper;
@@ -28,8 +29,8 @@ public class UsuarioService {
 	@Autowired
 	private EmailService emailService;
 
-	// @Autowired
-	// private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private JwtTokenUtil jwtService;
@@ -52,8 +53,7 @@ public class UsuarioService {
 		String senhaNova = passwordGeneratorService.generateRandomPassword();
 		String token = jwtService.gerarToken(usuario.getEmail());
 
-		// usuario.setSenha(passwordEncoder.encode(senhaNova));
-		usuario.setSenha(senhaNova);
+		usuario.setSenha(passwordEncoder.encode(senhaNova));
 		usuario.setToken(token);
 		usuario = usuarioRepository.save(usuario);
 
@@ -101,14 +101,13 @@ public class UsuarioService {
 		return UsuarioMapper.toRecordList(list);
 	}
 
-	public void resetPassword(String email, String baseURL) throws MessagingException {
+	public void resetPassword(String email, String baseURL) throws Exception {
 		UsuarioModel usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(
 				"Usuário com email " + email + " não encontrado!"));
 		String senhaNova = passwordGeneratorService.generateRandomPassword();
 		String token = jwtService.gerarToken(usuario.getEmail());
 		String linkAcesso = baseURL + "/usuario/alterar-senha";
-		// usuario.setSenha(passwordEncoder.encode(senhaNova));
-		usuario.setSenha(senhaNova);
+		usuario.setSenha(passwordEncoder.encode(senhaNova));
 		usuario.setToken(token);
 		usuarioRepository.save(usuario);
 		String corpoEmail = "<html><body>" +
@@ -142,14 +141,10 @@ public class UsuarioService {
 		if (!alterarSenhaRecord.token().equals(usuario.getToken())) {
 			throw new RuntimeException("Recuperação de senha desatualizada! Gere nova recuperação de senha.");
 		}
-		// if (!passwordEncoder.matches(formSenha.senhaAtual(), usuario.getSenha())) {
-		// throw new RuntimeException("Senha atual incorreta!");
-		// }
-		if (!alterarSenhaRecord.senhaAtual().equals(usuario.getSenha())) {
+		if (!passwordEncoder.matches(alterarSenhaRecord.senhaAtual(), usuario.getSenha())) {
 			throw new RuntimeException("Senha atual incorreta!");
 		}
-		// usuario.setSenha(passwordEncoder.encode(formSenha.senhaNova()));
-		usuario.setSenha(alterarSenhaRecord.senhaNova());
+		usuario.setSenha(passwordEncoder.encode(alterarSenhaRecord.senhaNova()));
 
 		usuario.setToken(null);
 		usuarioRepository.save(usuario);
@@ -160,11 +155,7 @@ public class UsuarioService {
 			throw new RuntimeException("Email ou senha inválidos!");
 		});
 
-		// if (!passwordEncoder.matches(loginRecord.senha(), usuario.getSenha())) {
-		// throw new RuntimeException("Email ou senha inválidos!");
-		// }
-
-		if (!loginRecord.senha().equals(usuario.getSenha())) {
+		if (!passwordEncoder.matches(loginRecord.senha(), usuario.getSenha())) {
 			throw new RuntimeException("Email ou senha inválidos!");
 		}
 

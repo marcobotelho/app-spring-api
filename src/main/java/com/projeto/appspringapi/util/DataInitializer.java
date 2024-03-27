@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.projeto.appspringapi.enums.TipoTelefoneEnum;
@@ -29,8 +30,8 @@ public class DataInitializer implements InitializingBean {
         @Autowired
         private ClienteRepository clienteRepository;
 
-        // @Autowired
-        // private PasswordEncoder passwordEncoder;
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
         @Autowired
         private CsvServiceSql csvServiceSql;
@@ -44,8 +45,7 @@ public class DataInitializer implements InitializingBean {
                 perfilUser = perfilRepository.save(perfilUser);
 
                 /* Criando os usuários */
-                // String senhaPadrao = passwordEncoder.encode("123");
-                String senhaPadrao = "123";
+                String senhaPadrao = passwordEncoder.encode("123");
                 UsuarioModel usuario1 = new UsuarioModel("Admin", "admin@email.com", senhaPadrao);
                 usuario1.setPerfis(List.of(perfilAdmin, perfilUser));
                 usuarioRepository.save(usuario1);
