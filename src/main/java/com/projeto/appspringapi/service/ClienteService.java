@@ -26,6 +26,9 @@ public class ClienteService {
 	}
 
 	public ClienteRecord save(ClienteRecord record) {
+		if (record.id() != null && record.id() > 0) {
+			throw new IllegalArgumentException("Id deve ser nulo para incluir um novo cliente!");
+		}
 		ClienteModel clienteModel = clienteRepository.save(ClienteMapper.toModel(record));
 		return ClienteMapper.toRecord(clienteModel);
 	}
